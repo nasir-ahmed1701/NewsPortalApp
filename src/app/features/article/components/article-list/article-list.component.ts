@@ -95,4 +95,31 @@ export class ArticleListComponent implements OnInit {
       this.getAllArticles();
     }
   }
+
+  onDelete(id: number) {
+    if (confirm('Are you sure, you want to delete the record ?')) {
+      this.deleteArticle(id);
+    }
+  }
+
+  private deleteArticle(id: number) {
+    this.articleService.deleteArticle(id).subscribe({
+      next: (res: any) => {
+        this.alertNotificationConfig = {
+          message: 'article is deleted',
+          show: true,
+          type: AlertNotificationTypeEnum.success,
+        };
+        this.onRefresh();
+      },
+      error: (err: any) => {
+        console.error(err.error.errors);
+        this.alertNotificationConfig = {
+          message: 'An errors occured',
+          show: true,
+          type: AlertNotificationTypeEnum.danger,
+        };
+      },
+    });
+  }
 }

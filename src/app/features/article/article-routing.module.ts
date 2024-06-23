@@ -14,7 +14,7 @@ const routes: Routes = [
     component: ArticleCreateComponent,
   },
   {
-    path: 'edit',
+    path: 'edit/:id',
     component: ArticleEditComponent,
   },
   {
