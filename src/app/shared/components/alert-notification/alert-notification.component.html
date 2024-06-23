@@ -1,0 +1,20 @@
+@if(config && config.show) {
+<div role="alert" class="alert alert-{{ config.type }} alert-dismissible">
+  <button
+    type="button"
+    aria-label="Close"
+    class="close btn-close"
+    (click)="close()"
+  >
+    <span aria-hidden="true" class="visually-hidden">×</span>
+    <span class="sr-only visually-hidden">Close</span></button
+  ><b
+    >{{
+      ((config.type && config.type == alertNotificationTypeEnum.danger)
+        ? "error"
+        : config.type) | titlecase
+    }}!</b
+  >
+  {{ config.message }}
+</div>
+}

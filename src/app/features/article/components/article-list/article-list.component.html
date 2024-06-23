@@ -1,0 +1,151 @@
+<div class="pt-4 pb-4">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h4>Article - List</h4>
+        </div>
+        <div class="col-sm-6">
+          <div class="d-flex justify-content-end">
+            <a class="btn btn-light" routerLink="/articles/create">Create</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <app-alert-notification
+      [config]="alertNotificationConfig"
+    ></app-alert-notification>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search"
+            aria-label="Search"
+            aria-describedby="basic-addon2"
+            [(ngModel)]="searchText"
+          />
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-light" (click)="onSearch()">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="btn btn-light" (click)="onRefresh()">
+            <i class="bi bi-arrow-clockwise"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- {{ articleResult | json }} -->
+
+  <div class="container">
+    @if(articleResult && articleResult.isSuccessfull && articleResult.data &&
+    articleResult.data.items && articleResult.data.items.length > 0){
+    @for(article of articleResult.data.items;track article.id){
+    <div class="card mb-3">
+      <div
+        class="card-header d-flex justify-content-between align-items-center"
+      >
+        <h5 class="card-title"></h5>
+        <div class="card-tools">
+          <button class="btn btn-sm btn-light">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-sm btn-light">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th scope="row">Title</th>
+              <td>{{ article.title }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Category</th>
+              <td>{{ article.category.title }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Date</th>
+              <td>
+                {{
+                  article.createdDateTimeUtc | date : "yyyy-MM-dd hh:mm:ss a"
+                }}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Description</th>
+              <td>
+                {{ article.description }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    } }@else{
+    <div class="alert alert-light text-center">No Records Found</div>
+    }
+  </div>
+
+  <!-- <span>Date -> {{articles?.data?.items[0]?.createdDateTimeUtc | date : 'yyyy-MM-dd hh:mm:ss a'}}</span> -->
+
+  @if(articleResult && articleResult.isSuccessfull && articleResult.data &&
+  articleResult.data.items && articleResult.data.items.length > 0){
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="mt-3">
+          <span
+            >Showing
+            {{
+              articleResult.data.currentPageNumber > 1
+                ? (articleResult.data.currentPageNumber - 1) *
+                    articleResult.data.currentPageSize +
+                  articleResult.data.items.length
+                : articleResult.data.items.length
+            }}
+            of {{ articleResult.data.totalCount }} records</span
+          >
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="d-flex justify-content-end mt-3">
+          <span class="pt-1"
+            >Page {{ articleResult.data.currentPageNumber }} of
+            {{ articleResult.data.totalPages }}</span
+          >&nbsp;
+          <button
+            class="btn btn-light"
+            (click)="onPreviousPageClick()"
+            [disabled]="articleResult.data.currentPageNumber <= 1"
+          >
+            <i class="bi bi-arrow-left"></i>
+          </button>
+
+          <button
+            class="btn btn-light"
+            (click)="onNextPageClick()"
+            [disabled]="
+              articleResult.data.currentPageNumber ==
+              articleResult.data.totalPages
+            "
+          >
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>
